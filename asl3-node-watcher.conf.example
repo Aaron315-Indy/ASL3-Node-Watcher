@@ -1,5 +1,5 @@
 [general]
-local_nodes = 658860
+local_nodes = AUTO
 ami_host = 127.0.0.1
 ami_port = 5038
 ami_username = asl3-node-watcher
@@ -9,9 +9,7 @@ command_timeout_seconds = 30
 max_parallel_scripts = 4
 log_level = INFO
 
-[node:520359]
-on_connect = /opt/asl3-scripts/connect.sh
-on_disconnect = /opt/asl3-scripts/disconnect.sh
-
-[node:662640]
-on_connect = /opt/asl3-scripts/another-script.py
+; Replace these example remote nodes with the ones you monitor.
+;[node:520359]
+;on_connect = /etc/asterisk/scripts/520359-CONNECTED.sh
+;on_disconnect = /etc/asterisk/scripts/520359-DISCONNECTED.sh
