@@ -1,0 +1,10 @@
+
+# Local credentials and runtime files
+.env
+*.env
+__pycache__/
+*.pyc
+.venv/
+*.bak
+*secret*
+*password*

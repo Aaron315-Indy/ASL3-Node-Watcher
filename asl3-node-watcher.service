@@ -1,0 +1,19 @@
+[Unit]
+Description=ASL3 Node Watcher
+After=network.target asterisk.service
+Wants=asterisk.service
+
+[Service]
+Type=simple
+User=asterisk
+Group=asterisk
+ExecStart=/usr/bin/python3 /opt/asl3-node-watcher/node_watcher.py /etc/asl3-node-watcher.conf
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
