@@ -50,16 +50,17 @@ def load_config(path):
 
 
 def parse_links(output, local_node):
-    """Parse app_rpt `rpt lstats` rows; node IDs must begin a line or follow `Node:`.
-
-    Ignore totals, timestamps, and embedded numbers in metrics.  A line with
-    `Node` plus a remote ID or a line beginning with an ID is considered a link.
-    """
+    """Parse established remote nodes from rpt lstats output."""
     links = set()
     for line in output.splitlines():
-        m = re.match(r'^\s*(?:Node\s*[:#]?\s*)?(\d{4,7})(?=\s|$|\s*[:,-])', line, re.I)
-        if m and m.group(1) != local_node:
-            links.add(m.group(1))
+        fields = line.split()
+        if not fields or not fields[0].isdigit():
+            continue
+        remote = fields[0]
+        if remote == str(local_node):
+            continue
+        if fields[-1].upper() == "ESTABLISHED":
+            links.add(remote)
     return links
 
 
@@ -104,7 +105,10 @@ class AMI:
                 return fields
             key, sep, value = line.decode('utf-8', 'replace').rstrip('\r\n').partition(':')
             if sep:
-                fields[key] = value.strip()
+                if key == 'Output' and key in fields:
+                    fields[key] += '\n' + value.strip()
+                else:
+                    fields[key] = value.strip()
 
     def action(self, fields):
         with self.lock:
